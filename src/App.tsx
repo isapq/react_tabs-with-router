@@ -72,7 +72,7 @@ const TabSelect = () => {
   );
 };
 
-const Erro = () => (
+const Error = () => (
   <div>
     <h1 className="title">Page not found</h1>
   </div>
@@ -90,18 +90,16 @@ export const App = () => {
       >
         <div className="container">
           <div className="navbar-brand">
-            <Link
-              to="/"
+            <div
               className={`navbar-item ${pathname === '/' ? 'is-active' : ''}`}
             >
-              Home
-            </Link>
-            <Link
-              to="/tabs"
+              <Link to="/">Home</Link>
+            </div>
+            <div
               className={`navbar-item ${pathname.startsWith('/tabs') ? 'is-active' : ''}`}
             >
-              Tabs
-            </Link>
+              <Link to="/tabs">Tabs</Link>
+            </div>
           </div>
         </div>
       </nav>
@@ -110,11 +108,11 @@ export const App = () => {
         <Routes>
           <Route path="/home" element={<Navigate to="/" replace />} />
           <Route path="/" element={<Home />} />
-          <Route path="/tabs" element={<Tabs />}>
-            <Route index element={<TabSelect />} />
+          <Route path="tabs" element={<Tabs />}>
+            <Route index element={<Navigate to="/tabs/tab-1" replace />} />
             <Route path=":tabId" element={<TabSelect />} />
           </Route>
-          <Route path="*" element={<Erro />} />
+          <Route path="*" element={<Error />} />
         </Routes>
       </div>
     </div>
