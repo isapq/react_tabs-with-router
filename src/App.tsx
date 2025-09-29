@@ -6,7 +6,6 @@ import {
   Route,
   Link,
   useParams,
-  Outlet,
   Navigate,
   useLocation,
 } from 'react-router-dom';
@@ -27,6 +26,7 @@ const Home = () => (
 
 const Tabs = () => {
   const { tabId } = useParams();
+  const selectedTab = tabs.find(tab => tab.id === tabId);
 
   return (
     <div className="section">
@@ -47,27 +47,16 @@ const Tabs = () => {
           </ul>
         </div>
 
-        <Outlet />
+        {!selectedTab ? (
+          <div className="block" data-cy="TabContent">
+            Please select a tab
+          </div>
+        ) : (
+          <div className="block" data-cy="TabContent">
+            {selectedTab.content}
+          </div>
+        )}
       </div>
-    </div>
-  );
-};
-
-const TabSelect = () => {
-  const { tabId } = useParams();
-  const selectedTab = tabs.find(tab => tab.id === tabId);
-
-  if (!selectedTab) {
-    return (
-      <div className="block" data-cy="TabContent">
-        Please select a tab
-      </div>
-    );
-  }
-
-  return (
-    <div className="block" data-cy="TabContent">
-      {selectedTab.content}
     </div>
   );
 };
@@ -108,9 +97,9 @@ export const App = () => {
         <Routes>
           <Route path="/home" element={<Navigate to="/" replace />} />
           <Route path="/" element={<Home />} />
-          <Route path="tabs" element={<Tabs />}>
-            <Route index element={<Navigate to="/tabs/tab-1" replace />} />
-            <Route path=":tabId" element={<TabSelect />} />
+          <Route path="tabs">
+            <Route index element={<Tabs />} />
+            <Route path=":tabId" element={<Tabs />} />
           </Route>
           <Route path="*" element={<Error />} />
         </Routes>
